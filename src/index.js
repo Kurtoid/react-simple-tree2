@@ -1,11 +1,10 @@
 import React, { Component, useRef } from 'react'
 import PropTypes from 'prop-types'
-import styles from './styles.css'
 import { DndProvider, useDrop } from 'react-dnd'
 import Backend from 'react-dnd-html5-backend'
 import { ItemTypes } from './constants'
 import { useDrag } from 'react-dnd'
-
+import styles from "../css/styles.css"
 function NodeLabel(props) {
   const ref = useRef(null)
   const handleNodeClick = () => {
