@@ -12,6 +12,7 @@ function NodeLabel(props) {
     onClick(nodeId)
   }
   const { nodeId, subNodes } = props
+  let node = props.nodes.get(nodeId)
   const [{ isDragging }, drag] = useDrag({
     item: { type: ItemTypes.NodeLabel, nodeId: nodeId },
     collect: monitor => ({
@@ -32,10 +33,10 @@ function NodeLabel(props) {
       // if (droppedNode === nodeId) {
       // return
       // }
+      node.collapsed = false
       props.setParent(nodeId, droppedNode)
     }
   })
-  let node = props.nodes.get(nodeId)
   let bullet = ">"
   if (node.collapsed || subNodes === undefined) {
     bullet = "*";
@@ -53,19 +54,39 @@ function NodeLabel(props) {
 class SimpleTree extends React.Component {
   constructor(props) {
     super(props);
-    const { data } = props
+    const { data, getNodeId } = props
     let nodes = new Map()
+
+    // this is derived state (bad?)
+    // TODO: break collapsed out to own element?
     data.forEach((originalNode) => {
-      nodes.set(originalNode.id, { collapsed: false, data: originalNode })
+      nodes.set(getNodeId(originalNode), { collapsed: false, data: originalNode })
     })
     this.state = {
       nodes: nodes,
     }
-    console.log("init nodes")
-    console.log(nodes)
+    // console.log("init nodes")
+    // console.log(nodes)
     this.handleNodeClick = this.handleNodeClick.bind(this)
     this.setParent = this.setParent.bind(this)
   }
+
+  // TODO: optimize/remove this
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { data, getNodeId } = nextProps
+    const { nodes } = prevState
+
+    data.forEach((newNode) => {
+      let oldNode = nodes.get(getNodeId(newNode))
+      if (oldNode === undefined) {
+        nodes.set(getNodeId(newNode), { collapsed: false, data: newNode })
+      } else {
+        nodes.set(getNodeId(newNode), { collapsed: oldNode.collapsed || false, data: oldNode.data })
+      }
+    })
+    return { ...prevState, nodes }
+  }
+
   getRootNode() {
     const { nodes } = this.state;
     for (let [key, value] of nodes) {
@@ -91,9 +112,18 @@ class SimpleTree extends React.Component {
     // console.log(ret)
     return ret;
   }
+  hasChildren(nodeId) {
+    const { nodes } = this.state;
+    for (let [_, value] of nodes) {
+      if (value.data.parent === nodeId) {
+        return true;
+      }
+    }
+    return false;
+  }
   handleNodeClick(nodeId) {
-    console.log("node clicked: " + nodeId)
     const { nodes } = this.state
+    const { nodeClicked, getNodeId } = this.props
     let node = nodes.get(nodeId)
     if (node === null) {
       return
@@ -103,15 +133,11 @@ class SimpleTree extends React.Component {
     } else {
       node.collapsed = !node.collapsed
     }
+    nodeClicked(getNodeId(node), node)
     this.setState({ nodes: nodes })
-  }
-  // called when a new node is added or removed
-  syncNodes() {
-
   }
   setParent(parentId, childId) {
     console.log("setting parent")
-    this.syncNodes()
     this.props.setParent(parentId, childId)
   }
   renderNode(nodeId) {
@@ -140,5 +166,12 @@ class SimpleTree extends React.Component {
       </DndProvider>
     )
   }
+}
+
+SimpleTree.defaultProps = {
+  getNodeId: (node) => node.id,
+  getNodeName: (node) => node.name,
+  getNodeParent: (node) => node.parent,
+  nodeClicked: (nodeId, node) => { console.log("node clicked"); console.log(node) }
 }
 export default SimpleTree
