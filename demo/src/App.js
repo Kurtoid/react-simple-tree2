@@ -30,6 +30,9 @@ class App extends React.Component {
   setNodeParent(parentId, childId) {
     console.log("set parent " + parentId + " " + childId)
     console.log("set parent " + typeof (parentId) + " " + typeof (childId))
+    if (parentId === childId) {
+      return
+    }
     let childNode = null
     for (let i = 0; i < this.state.data.length; i++) {
       if (this.state.data[i].id === childId) {
