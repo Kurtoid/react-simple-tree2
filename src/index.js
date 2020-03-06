@@ -46,7 +46,7 @@ function NodeLabel(props) {
   }
   return (
     <li >
-      <div ref={ref} onClick={handleNodeClick}>{bullet} {node.data.name}</div>
+      <div ref={ref} onClick={handleNodeClick}>{bullet} {props.getNodeName(node.data)}</div>
       {subNodes}
     </li>
   )
@@ -152,7 +152,7 @@ class SimpleTree extends React.Component {
       subNodes = <ul>{rows}</ul>
     }
     return (
-      <NodeLabel nodes={nodes} nodeId={nodeId} key={nodeId} subNodes={subNodes} onClick={this.handleNodeClick} setParent={this.setParent} />
+      <NodeLabel nodes={nodes} nodeId={nodeId} key={nodeId} subNodes={subNodes} onClick={this.handleNodeClick} setParent={this.setParent} getNodeName={this.props.getNodeName} />
     )
   }
   render() {

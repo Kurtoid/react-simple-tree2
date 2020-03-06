@@ -16,11 +16,11 @@ class App extends React.Component {
     super(props)
     this.state = {
       data: [
-        { id: 1, name: "root", parent: null },
-        { id: 2, name: "sub1", parent: 1, collapsed: true },
-        { id: 3, name: "sub2", parent: 1 },
-        { id: 4, name: "1sub1", parent: 2 },
-        { id: 5, name: "1sub2", parent: 2 }
+        { id: 1, title: "root", parent: null },
+        { id: 2, title: "sub1", parent: 1, collapsed: true },
+        { id: 3, title: "sub2", parent: 1 },
+        { id: 4, title: "1sub1", parent: 2 },
+        { id: 5, title: "1sub2", parent: 2 }
       ],
       nextNodeId: 6,
     }
@@ -47,14 +47,14 @@ class App extends React.Component {
   addNode() {
     console.log("adding new node to state")
     const { nextNodeId } = this.state
-    this.setState({ data: [...this.state.data, { id: nextNodeId, parent: Math.floor(Math.random() * (nextNodeId - 1)) + 1, name: "newNode" + nextNodeId }], nextNodeId: nextNodeId + 1 })
+    this.setState({ data: [...this.state.data, { id: nextNodeId, parent: Math.floor(Math.random() * (nextNodeId - 1)) + 1, title: "newNode" + nextNodeId }], nextNodeId: nextNodeId + 1 })
 
   }
   render() {
     const { data } = this.state
     return (
       <div className="App">
-        <SimpleTree data={data} setParent={this.setNodeParent} />
+        <SimpleTree data={data} setParent={this.setNodeParent} getNodeName={(node) => node.title} />
         <button onClick={this.addNode} >add node</button>
         {/* <button onClick={removeNode} >remove node</button> */}
       </div>
