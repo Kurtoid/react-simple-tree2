@@ -1,10 +1,10 @@
 # react-simple-tree2
-
+under development, so you probably shouldnt use this yet (unless you want to help 🙂)
 [![Travis][build-badge]][build]
 [![npm package][npm-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-Describe react-simple-tree2 here.
+a simple tree, because everything else I found was too complicated
 
 [build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
 [build]: https://travis-ci.org/user/repo
