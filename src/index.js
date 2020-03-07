@@ -81,7 +81,7 @@ class SimpleTree extends React.Component {
       if (oldNode === undefined) {
         nodes.set(getNodeId(newNode), { collapsed: false, data: newNode })
       } else {
-        nodes.set(getNodeId(newNode), { collapsed: oldNode.collapsed || false, data: newNode.data })
+        nodes.set(getNodeId(newNode), { collapsed: oldNode.collapsed || false, data: newNode })
       }
     })
     return { ...prevState, nodes }

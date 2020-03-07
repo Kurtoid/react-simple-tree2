@@ -1,6 +1,6 @@
 {
   "name": "react-simple-tree2",
-  "version": "0.0.9-development",
+  "version": "0.0.10-development",
   "description": "react-simple-tree2 React component",
   "main": "lib/index.js",
   "module": "es/index.js",
